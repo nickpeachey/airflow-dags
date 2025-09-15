@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from datetime import datetime, timedelta
 
 default_args = {
@@ -28,3 +29,16 @@ with DAG(
         timeout=60 * 60,
         mode='poke',
     )
+
+    trigger_spark_dag = TriggerDagRunOperator(
+        task_id='trigger_spark_k8s_dag',
+        trigger_dag_id='spark_kubernetes_job',  # Must match the DAG ID in spark_kubernetes_dag.py
+        conf={
+            'minio_conn_id': 'minio_conn',
+            # You can add more context here if useful, e.g. bucket/key patterns
+            # 'bucket_name': 'data-lake',
+        },
+        # wait_for_completion=False is default; set to True if you want to block until completion
+    )
+
+    watch_for_file >> trigger_spark_dag
