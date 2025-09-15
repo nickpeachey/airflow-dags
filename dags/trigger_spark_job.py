@@ -16,9 +16,10 @@ with DAG(
     dag_id='watch_s3_bucket',
     default_args=default_args,
     description='Watch for new files in an S3 bucket',
-    schedule_interval='@hourly',
+    schedule_interval='@2min',
     start_date=datetime(2024, 1, 1),
     catchup=False,
+    max_active_runs=1,  # avoid overlapping runs while the sensor waits
     tags=['s3', 'sensor'],
 ) as dag:
 
@@ -28,9 +29,9 @@ with DAG(
         bucket_name='data-lake',
         aws_conn_id='minio_conn',
         wildcard_match=True,  # Treat bucket_key as a wildcard pattern
-        poke_interval=2,
+        poke_interval=60,
         timeout=60 * 60,
-        mode='poke',
+        mode='reschedule',  # yield the worker slot between pokes to prevent SIGTERM due to long-running tasks
     )
 
     list_s3_keys = S3ListOperator(
