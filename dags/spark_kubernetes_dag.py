@@ -3,7 +3,6 @@ from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKu
 from airflow.operators.python import PythonOperator, get_current_context
 from airflow.hooks.base import BaseHook
 from datetime import datetime
-from airflow.exceptions import AirflowException
 
 with DAG(
     dag_id='spark_kubernetes_job',
@@ -13,25 +12,6 @@ with DAG(
     catchup=False,
     tags=['spark', 'kubernetes'],
 ) as dag:
-
-    def _validate_conf():
-        context = get_current_context()
-        dag_run = context.get('dag_run')
-        conf = getattr(dag_run, 'conf', {}) or {}
-        missing = []
-        for key in ['minio_conn_id', 'namespace', 's3_bucket', 's3_key']:
-            if not conf.get(key):
-                missing.append(key)
-        if missing:
-            raise AirflowException(
-                f"Missing required dag_run.conf keys: {missing}. "
-                "Trigger this DAG via the watcher or include a conf with these keys."
-            )
-
-    validate_conf = PythonOperator(
-        task_id='validate_conf',
-        python_callable=_validate_conf,
-    )
 
     def _log_minio_conf():
         context = get_current_context()
@@ -69,4 +49,4 @@ with DAG(
         do_xcom_push=False,
         in_cluster=True
     )
-    validate_conf >> log_minio_conf >> submit_spark_app
+    log_minio_conf >> submit_spark_app
