@@ -7,7 +7,7 @@ spec:
   type: Scala
   mode: cluster
   # Use an image that contains Spark and the Python examples; adjust to your registry as needed
-  image: nickpeachey/windows-spark-job:0.0.5
+  image: nickpeachey/windows-spark-job:1.0.0
   imagePullPolicy: IfNotPresent
   sparkVersion: "3.5.6"
   mainClass: com.cawooka.windowssparkjob.SparkPi
