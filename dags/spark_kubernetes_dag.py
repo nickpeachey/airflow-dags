@@ -44,7 +44,7 @@ with DAG(
         task_id='submit_spark_app',
         namespace='{{ dag_run.conf.namespace | default("airflow") }}',
         # Path to your SparkApplication manifest (relative to the Airflow worker filesystem)
-        application_file='dags/spark-job.yaml',
+        application_file='spark-job.yaml',
         kubernetes_conn_id='kubernetes_default',
         do_xcom_push=True,
     )
