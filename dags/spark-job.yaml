@@ -8,7 +8,7 @@ spec:
   pythonVersion: "3"
   mode: cluster
   # Use an image that contains Spark and the Python examples; adjust to your registry as needed
-  image: apache/spark-py:3.4.1
+  image: apache/spark-py:latest
   imagePullPolicy: IfNotPresent
   sparkVersion: "3.4.1"
 
