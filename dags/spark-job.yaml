@@ -1,0 +1,65 @@
+apiVersion: sparkoperator.k8s.io/v1beta2
+kind: SparkApplication
+metadata:
+  name: spark-minio-example
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "3"
+  mode: cluster
+  # Use an image that contains Spark and the Python examples; adjust to your registry as needed
+  image: apache/spark-py:3.4.1
+  imagePullPolicy: IfNotPresent
+  sparkVersion: "3.4.1"
+
+  # Replace this with your own application if desired
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments:
+    - "1000"
+
+  restartPolicy:
+    type: Never
+
+  # Spark/Hadoop configuration for MinIO (S3 compatible)
+  sparkConf:
+    spark.hadoop.fs.s3a.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
+    spark.hadoop.fs.s3a.endpoint: "{{ (conn[dag_run.conf.minio_conn_id | default('minio_conn')].schema or 'http') ~ '://' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].host ~ ( (':' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].port) if conn[dag_run.conf.minio_conn_id | default('minio_conn')].port else '' ) }}"
+    spark.hadoop.fs.s3a.path.style.access: "true"
+    spark.hadoop.fs.s3a.connection.ssl.enabled: "{{ 'true' if (conn[dag_run.conf.minio_conn_id | default('minio_conn')].schema == 'https') else 'false' }}"
+    spark.hadoop.fs.s3a.aws.credentials.provider: com.amazonaws.auth.EnvironmentVariableCredentialsProvider
+
+  driver:
+    cores: 1
+    memory: 512m
+    serviceAccount: spark
+    labels:
+      app.kubernetes.io/name: spark-minio-example
+    env:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: minio-credentials
+            key: accessKey
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: minio-credentials
+            key: secretKey
+
+  executor:
+    instances: 1
+    cores: 1
+    memory: 1g
+    labels:
+      app.kubernetes.io/name: spark-minio-example
+    env:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: minio-credentials
+            key: accessKey
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: minio-credentials
+            key: secretKey
