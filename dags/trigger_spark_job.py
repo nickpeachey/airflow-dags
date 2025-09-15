@@ -27,6 +27,7 @@ with DAG(
         bucket_key='*',  # Watch for any file in the bucket
         bucket_name='data-lake',
         aws_conn_id='minio_conn',
+        wildcard_match=True,  # Treat bucket_key as a wildcard pattern
         poke_interval=60,
         timeout=60 * 60,
         mode='poke',
