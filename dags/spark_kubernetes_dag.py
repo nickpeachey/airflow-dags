@@ -46,7 +46,7 @@ with DAG(
         # Path to your SparkApplication manifest (relative to the Airflow worker filesystem)
         application_file='spark-job.yaml',
         kubernetes_conn_id='kubernetes_default',
-        do_xcom_push=True,
+        do_xcom_push=False,
         in_cluster=True
     )
     log_minio_conf >> submit_spark_app
