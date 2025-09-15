@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import KubernetesSparkOperator
+from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.operators.python import PythonOperator, get_current_context
 from airflow.hooks.base import BaseHook
 from datetime import datetime
@@ -40,7 +40,7 @@ with DAG(
         python_callable=_log_minio_conf,
     )
 
-    submit_spark_app = KubernetesSparkOperator(
+    submit_spark_app = SparkKubernetesOperator(
         task_id='submit_spark_app',
         namespace='default',
         # Path to your SparkApplication manifest (relative to the Airflow worker filesystem)
