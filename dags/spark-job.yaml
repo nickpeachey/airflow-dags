@@ -36,15 +36,9 @@ spec:
       app.kubernetes.io/name: spark-minio-example
     env:
       - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
-            key: accessKey
+        value: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].login }}"
       - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
-            key: secretKey
+        value: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].password }}"
       - name: S3_BUCKET
         value: "{{ dag_run.conf.s3_bucket | default('data-lake') }}"
       - name: S3_KEY
@@ -58,15 +52,9 @@ spec:
       app.kubernetes.io/name: spark-minio-example
     env:
       - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
-            key: accessKey
+        value: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].login }}"
       - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
-            key: secretKey
+        value: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].password }}"
       - name: S3_BUCKET
         value: "{{ dag_run.conf.s3_bucket | default('data-lake') }}"
       - name: S3_KEY
