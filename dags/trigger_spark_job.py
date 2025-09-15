@@ -60,7 +60,7 @@ with DAG(
         trigger_dag_id='spark_kubernetes_job',  # Must match the DAG ID in spark_kubernetes_dag.py
         conf={
             'minio_conn_id': 'minio_conn',
-            'namespace': 'airflow',
+            'namespace': 'default',
             's3_bucket': 'data-lake',
             's3_key': '{{ ti.xcom_pull(task_ids="pick_latest_key") }}',
             # You can add more context here if useful, e.g. bucket/key patterns
