@@ -4,16 +4,15 @@ metadata:
   name: spark-minio-example
   namespace: "{{ dag_run.conf.namespace | default('default') }}"
 spec:
-  type: Python
-  pythonVersion: "3"
+  type: Scala
   mode: cluster
   # Use an image that contains Spark and the Python examples; adjust to your registry as needed
-  image: apache/spark-py:latest
+  image: nickpeachey/windows-spark-job
   imagePullPolicy: IfNotPresent
   sparkVersion: "3.4.1"
-
+  mainClass: com.cawooka.windowssparkjob.SparkPi
   # Replace this with your own application if desired
-  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  mainApplicationFile: local:///opt/spark/jars/windows-spark-job.jar
   arguments:
     - "10"
 
