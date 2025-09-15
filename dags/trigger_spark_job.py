@@ -35,6 +35,7 @@ with DAG(
         trigger_dag_id='spark_kubernetes_job',  # Must match the DAG ID in spark_kubernetes_dag.py
         conf={
             'minio_conn_id': 'minio_conn',
+            'namespace': 'airflow',
             # You can add more context here if useful, e.g. bucket/key patterns
             # 'bucket_name': 'data-lake',
         },

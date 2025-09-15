@@ -48,15 +48,13 @@ with DAG(
         dag_run = context.get('dag_run')
         conf = getattr(dag_run, 'conf', {}) or {}
         minio_conn_id = conf.get('minio_conn_id', 'minio_conn')
+        namespace = conf.get('namespace', 'airflow')
+        secret_name = conf.get('secret_name', 'minio-credentials')
 
         # Resolve connection
         conn = BaseHook.get_connection(minio_conn_id)
         access_key = conn.login or ''
         secret_key = conn.password or ''
-
-        # Create or update K8s secret in the target namespace
-        namespace = 'default'
-        secret_name = 'minio-credentials'
 
         hook = KubernetesHook(conn_id='kubernetes_default')
         api = hook.core_v1_client
@@ -88,7 +86,7 @@ with DAG(
 
     submit_spark_app = SparkKubernetesOperator(
         task_id='submit_spark_app',
-        namespace='default',
+        namespace='{{ dag_run.conf.namespace | default("airflow") }}',
         # Path to your SparkApplication manifest (relative to the Airflow worker filesystem)
         application_file='dags/spark-job.yaml',
         kubernetes_conn_id='kubernetes_default',

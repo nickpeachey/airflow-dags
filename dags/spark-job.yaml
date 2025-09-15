@@ -2,7 +2,7 @@ apiVersion: sparkoperator.k8s.io/v1beta2
 kind: SparkApplication
 metadata:
   name: spark-minio-example
-  namespace: default
+  namespace: "{{ dag_run.conf.namespace | default('default') }}"
 spec:
   type: Python
   pythonVersion: "3"
