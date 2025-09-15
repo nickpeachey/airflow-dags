@@ -71,12 +71,17 @@ with DAG(
         try:
             # Try to create; if exists, replace
             api.create_namespaced_secret(namespace=namespace, body=body)
-            print(f"Created secret {secret_name} in namespace {namespace}")
+            msg = f"Created secret {secret_name} in namespace {namespace}"
+            print(msg)
+            return {"action": "created", "secret_name": secret_name, "namespace": namespace}
         except ApiException as e:
             if e.status == 409:
                 api.replace_namespaced_secret(name=secret_name, namespace=namespace, body=body)
-                print(f"Updated existing secret {secret_name} in namespace {namespace}")
+                msg = f"Updated existing secret {secret_name} in namespace {namespace}"
+                print(msg)
+                return {"action": "updated", "secret_name": secret_name, "namespace": namespace}
             else:
+                print(f"Failed to create/update secret: {e}")
                 raise
 
     ensure_minio_secret = PythonOperator(

@@ -38,13 +38,17 @@ spec:
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
           secretKeyRef:
-            name: minio-credentials
+            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
             key: accessKey
       - name: AWS_SECRET_ACCESS_KEY
         valueFrom:
           secretKeyRef:
-            name: minio-credentials
+            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
             key: secretKey
+      - name: S3_BUCKET
+        value: "{{ dag_run.conf.s3_bucket | default('data-lake') }}"
+      - name: S3_KEY
+        value: "{{ dag_run.conf.s3_key | default('') }}"
 
   executor:
     instances: 1
@@ -56,10 +60,14 @@ spec:
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
           secretKeyRef:
-            name: minio-credentials
+            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
             key: accessKey
       - name: AWS_SECRET_ACCESS_KEY
         valueFrom:
           secretKeyRef:
-            name: minio-credentials
+            name: "{{ dag_run.conf.secret_name | default('minio-credentials') }}"
             key: secretKey
+      - name: S3_BUCKET
+        value: "{{ dag_run.conf.s3_bucket | default('data-lake') }}"
+      - name: S3_KEY
+        value: "{{ dag_run.conf.s3_key | default('') }}"
