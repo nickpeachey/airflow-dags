@@ -42,10 +42,11 @@ with DAG(
 
     submit_spark_app = SparkKubernetesOperator(
         task_id='submit_spark_app',
-        namespace='{{ dag_run.conf.namespace | default("default") }}',
+        namespace="default",
         # Path to your SparkApplication manifest (relative to the Airflow worker filesystem)
         application_file='spark-job.yaml',
         kubernetes_conn_id='kubernetes_default',
         do_xcom_push=True,
+        in_cluster=True
     )
     log_minio_conf >> submit_spark_app
