@@ -19,7 +19,7 @@ spec:
 
   # Spark/Hadoop configuration for MinIO (S3 compatible)
   sparkConf:
-    spark.hadoop.fs.s3a.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
+    spark.hadoop.fs.s3a.impl: "org.apache.hadoop.fs.s3a.S3AFileSystem"
     spark.hadoop.fs.s3a.access.key: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].login }}",
     spark.hadoop.fs.s3a.secret.key: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].password }}",
     spark.hadoop.fs.s3a.endpoint: "{{ (conn[dag_run.conf.minio_conn_id | default('minio_conn')].schema or 'http') ~ '://' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].host ~ ( (':' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].port) if conn[dag_run.conf.minio_conn_id | default('minio_conn')].port else '' ) }}"
