@@ -19,13 +19,13 @@ spec:
 
   # Spark/Hadoop configuration for MinIO (S3 compatible)
   sparkConf:
-    spark.hadoop.fs.s3a.impl: "org.apache.hadoop.fs.s3a.S3AFileSystem"
-    spark.hadoop.fs.s3a.access.key: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].login }}",
-    spark.hadoop.fs.s3a.secret.key: "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].password }}",
-    spark.hadoop.fs.s3a.endpoint: "{{ (conn[dag_run.conf.minio_conn_id | default('minio_conn')].schema or 'http') ~ '://' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].host ~ ( (':' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].port) if conn[dag_run.conf.minio_conn_id | default('minio_conn')].port else '' ) }}"
-    spark.hadoop.fs.s3a.path.style.access: "true"
-    spark.hadoop.fs.s3a.connection.ssl.enabled: "{{ 'true' if (conn[dag_run.conf.minio_conn_id | default('minio_conn')].schema == 'https') else 'false' }}"
-    spark.hadoop.fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider",
+    "spark.hadoop.fs.s3a.impl": "org.apache.hadoop.fs.s3a.S3AFileSystem"
+    "spark.hadoop.fs.s3a.access.key": "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].login }}"
+    "spark.hadoop.fs.s3a.secret.key": "{{ conn[dag_run.conf.minio_conn_id | default('minio_conn')].password }}"
+    "spark.hadoop.fs.s3a.endpoint": "{{ (conn[dag_run.conf.minio_conn_id | default('minio_conn')].schema or 'http') ~ '://' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].host ~ ( (':' ~ conn[dag_run.conf.minio_conn_id | default('minio_conn')].port) if conn[dag_run.conf.minio_conn_id | default('minio_conn')].port else '' ) }}"
+    "spark.hadoop.fs.s3a.path.style.access": "true"
+    "spark.hadoop.fs.s3a.connection.ssl.enabled": "{{ 'true' if (conn[dag_run.conf.minio_conn_id | default('minio_conn')].schema == 'https') else 'false' }}"
+    "spark.hadoop.fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider"
 
   driver:
     cores: 1
