@@ -70,7 +70,7 @@ def generate_spark_minio_config(**kwargs):
                 "image": "nickpeachey/windows-spark-job:2.0.2", # IMPORTANT: Replace with your actual Spark image (e.g., with Hadoop S3A support)
                 "imagePullPolicy": "Always",
                 "mainClass": "com.cawooka.MainExecutor", # IMPORTANT: Replace with your Scala main class
-                "mainApplicationFile": "local:///opt/spark/jars/spark-debug-app.jar", # IMPORTANT: Path to your JAR inside the Spark image
+                "mainApplicationFile": "local:///opt/spark/jars/windows-spark-job.jar", # IMPORTANT: Path to your JAR inside the Spark image
                 "sparkConf": {
                     # Configure Spark to use S3A for MinIO
                     # Use the dynamically retrieved endpoint here
