@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import json
 from airflow import DAG
 from airflow.hooks.base import BaseHook
-from airflow.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator, get_current_context
 from airflow.operators.bash import BashOperator
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
@@ -17,6 +17,8 @@ def generate_spark_minio_config(**kwargs):
     # Initialize variables to None, in case of early exit or error
     spark_app_name = None
     spark_application_config = None
+
+
 
     try:
         # 1. Get the Airflow Connection for MinIO
@@ -39,6 +41,13 @@ def generate_spark_minio_config(**kwargs):
             print(f"MinIO Endpoint URL blahb: {endpoint_url}")
         else:
             print("'endpoint_url' not found in the 'extras' of 'minio_conn'.")
+
+        context = get_current_context()
+        dag_run = context.get('dag_run')
+        conf = getattr(dag_run, 'conf', {}) or {}
+
+        file_key = conf.get('s3_key', 'data.csv')
+        bucket_name = conf.get('s3_bucket', 'data-lake')
 
 
         minio_host = conn.host
@@ -94,7 +103,8 @@ def generate_spark_minio_config(**kwargs):
                 },
                 "restartPolicy": {
                     "type": "Never" # Or OnFailure, Always
-                }
+                },
+                "arguments": [bucket_name, file_key], # Pass bucket and key as arguments to your Spark job
             },
         }
 
