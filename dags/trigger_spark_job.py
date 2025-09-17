@@ -59,7 +59,7 @@ with DAG(
 
     trigger_spark_dag = TriggerDagRunOperator(
         task_id='trigger_spark_k8s_dag',
-        trigger_dag_id='spark_kubernetes_job',  # Must match the DAG ID in spark_kubernetes_dag.py
+        trigger_dag_id='spark_minio_saver_with_localstack',  # Must match the DAG ID in spark_kubernetes_dag.py
         conf={
             'minio_conn_id': 'minio_conn',
             'namespace': 'default',
