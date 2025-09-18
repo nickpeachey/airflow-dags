@@ -38,3 +38,5 @@ start = EmptyOperator(
     task_id='start',
     dag=dag,
 )
+
+start
