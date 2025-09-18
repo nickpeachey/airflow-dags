@@ -38,6 +38,7 @@ dag = DAG(
 
 def read_json_file():
     print(f"Reading JSON file from path: {config}")
+    throw_error()
 
 
 with TaskGroup("JsonTasksaAndReaders", 
@@ -62,4 +63,4 @@ with TaskGroup("JsonTasksaAndReaders",
         raise AirflowException("This is a test exception")
 
 
-start >> run >> throw_error()
+start >> run
