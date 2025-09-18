@@ -15,7 +15,7 @@ configuration = configPath + '/load_json_file_dag_config.json'
 
 with open(configuration, 'r') as config_file:
     config = json.load(config_file)
-    logger.info(f"Configuration loaded: {config}")
+    print(f"Configuration loaded: {config}")
 
 
 default_args = {
