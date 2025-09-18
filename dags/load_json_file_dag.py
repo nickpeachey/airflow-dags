@@ -4,15 +4,12 @@ from airflow import DAG
 import logging
 from datetime import datetime, timedelta
 from airflow.operators.empty import EmptyOperator
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
+from airflow.operators.python import PythonOperator
 
 configPath = os.path.dirname(os.path.realpath(__file__))
 
 configuration = configPath + '/load_json_file_dag_config.json'
-
+config = {}
 with open(configuration, 'r') as config_file:
     config = json.load(config_file)
     print(f"Configuration loaded: {config}")
@@ -37,9 +34,20 @@ dag = DAG(
     tags=['example'],
 )
 
+def read_json_file():
+    print(f"Reading JSON file from path: {config}")
+
+
+
 start = EmptyOperator(
     task_id='start',
     dag=dag,
 )
 
-start
+run = PythonOperator(
+    task_id='read_json_file',
+    python_callable=read_json_file,
+    dag=dag,
+)
+
+start >> run
