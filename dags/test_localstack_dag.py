@@ -1,4 +1,4 @@
-mport os
+import os
 from airflow.sensors.time_delta import TimeDeltaSensor
 from datetime import datetime, timedelta
 import json
