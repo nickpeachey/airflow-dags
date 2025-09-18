@@ -39,7 +39,7 @@ def read_json_file():
     print(f"Reading JSON file from path: {config}")
 
 
-with TaskGroup("Json Tasks and Readers", 
+with TaskGroup("JsonTasksaAndReaders", 
                dag=dag, 
                tooltip="Read Json File"
                ) as json_tasks:
