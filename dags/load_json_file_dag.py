@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from airflow.utils.task_group import TaskGroup
-from airflow.exceptions import AirflowException
+
 
 configPath = os.path.dirname(os.path.realpath(__file__))
 
@@ -38,7 +38,6 @@ dag = DAG(
 
 def read_json_file():
     print(f"Reading JSON file from path: {config}")
-    throw_error()
 
 
 with TaskGroup("JsonTasksaAndReaders", 
@@ -59,8 +58,6 @@ with TaskGroup("JsonTasksaAndReaders",
         dag=dag,
     )
 
-    def throw_error():
-        raise AirflowException("This is a test exception")
 
 
 start >> run
