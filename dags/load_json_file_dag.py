@@ -5,6 +5,7 @@ import logging
 from datetime import datetime, timedelta
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
+from airflow.utils.task_group import TaskGroup
 
 configPath = os.path.dirname(os.path.realpath(__file__))
 
@@ -38,16 +39,23 @@ def read_json_file():
     print(f"Reading JSON file from path: {config}")
 
 
+with TaskGroup("json_tasks", 
+               dag=dag, 
+               tooltip="Read Json File"
+               ) as json_tasks:
+    
+    task_id = "read_json_file"
 
-start = EmptyOperator(
-    task_id='start',
-    dag=dag,
-)
+    start = EmptyOperator(
+        task_id='start',
+        dag=dag
+    )
 
-run = PythonOperator(
-    task_id='read_json_file',
-    python_callable=read_json_file,
-    dag=dag,
-)
+    run = PythonOperator(
+        task_id='read_json_file',
+        python_callable=read_json_file,
+        dag=dag,
+    )
+
 
 start >> run
