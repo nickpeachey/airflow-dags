@@ -8,7 +8,7 @@ from airflow.operators.empty import EmptyOperator
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-configuration = '/load_json_file_dag_config.json'
+configuration = 'load_json_file_dag_config.json'
 
 with open(configuration, 'r') as config_file:
     config = json.load(config_file)
