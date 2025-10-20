@@ -71,10 +71,6 @@ def generate_spark_minio_config(**kwargs):
                 "imagePullPolicy": "Always",
                 "mainClass": "com.cawooka.windowssparkjob.SparkPi", # IMPORTANT: Replace with your Scala main class
                 "mainApplicationFile": "local:///opt/spark/jars/windows-spark-job.jar",
-                "monitoring": {
-                    "exposeDriverMetrics": "true",
-                    "exposeExecutorMetrics": "true" # IMPORTANT: Path to your JAR inside the Spark image
-                },
                 "sparkConf": {
                     # Configure Spark to use S3A for MinIO
                     # Use the dynamically retrieved endpoint here
