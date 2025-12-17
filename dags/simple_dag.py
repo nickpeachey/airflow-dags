@@ -177,7 +177,7 @@ def create_ingest_dags(
     return ingest_dag_obj
 
 
-with open("include/ingestion_source_config.json", "r") as f:
+with open("ingestion_source_config.json", "r") as f:
     config = json.load(f)
 
 
