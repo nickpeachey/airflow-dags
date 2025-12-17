@@ -1,12 +1,16 @@
 import datetime
 
-from airflow.decorators import dag
+from airflow.decorators import DAG
 from airflow.operators.empty import EmptyOperator
+from airflow.operators.bash import BashOperator
 
+import pendulum
 
-@dag(start_date=datetime.datetime(2021, 1, 1), schedule="@daily")
-def generate_dag():
-    EmptyOperator(task_id="task")
-
-
-generate_dag()
+with DAG(
+    dag_id="my_dag",
+    start_date=pendulum.datetime(2016, 1, 1),
+    schedule="@daily",
+    default_args={"retries": 2},
+):
+    op = BashOperator(task_id="hello_world", bash_command="Hello World!")
+    print(op.retries)  # 2
