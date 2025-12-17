@@ -4,7 +4,7 @@
 This DAG is generated dynamically from the `ingestion_source_config.json` file.
 There is one DAG per source.
 """
-
+import os
 from airflow.datasets import Dataset
 from airflow.decorators import dag, task
 from airflow.models.baseoperator import chain
@@ -176,8 +176,11 @@ def create_ingest_dags(
 
     return ingest_dag_obj
 
+configPath = os.path.dirname(os.path.realpath(__file__))
 
-with open("/ingestion_source_config.json", "r") as f:
+configuration = configPath + '/ingestion_source_config.json'
+
+with open(configuration, "r") as f:
     config = json.load(f)
 
 
