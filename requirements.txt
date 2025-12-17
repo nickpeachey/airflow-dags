@@ -1,0 +1,8 @@
+## Use Airflow constraints to ensure compatible, pinned dependencies
+-c https://raw.githubusercontent.com/apache/airflow/constraints-2.10.5/constraints-3.9.txt
+
+apache-airflow==2.10.5
+# Providers: rely on constraints for exact versions
+apache-airflow-providers-cncf-kubernetes
+apache-airflow-providers-apache-spark
+apache-airflow-providers-amazon
