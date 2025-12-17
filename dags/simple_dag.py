@@ -14,7 +14,7 @@ from airflow.operators.empty import EmptyOperator
 from pendulum import parse, datetime, duration
 from typing import Any
 import json
-from include.ingestion.ingest_functions import evaluate_new_file, verify_checksum
+
 
 
 def create_ingest_dags(
@@ -116,9 +116,8 @@ def create_ingest_dags(
             context["my_mapping_variable"] = f"Source file: {file_name}"
             check_sum_file = file.checksum()
 
-            result = verify_checksum(check_sum_file)
 
-            return result
+            return check_sum_file
 
         @task(
             task_id=f"load_{source_name}",
